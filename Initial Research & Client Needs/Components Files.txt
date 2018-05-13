@@ -1,7 +1,7 @@
-Comonents Identified: 
+Components Identified: 
 Based on : - https://github.com/goscommons/Grapples/wiki 
 
-- Hydraulyic Pump x 2 
-- Upper claw 
-- Lower Claw
+- Hydraulyic Cylinders x 2 
+- Lids 
+- Tines
 
