@@ -1,1 +1,1 @@
-![](/images/graple cad structure.jpg)
+![cad structure](/images/CAD_structure.jpg)
