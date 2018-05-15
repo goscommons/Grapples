@@ -1,1 +1,1 @@
-![cad structure](/images/CAD_structure.jpg)
+![cad structure](images/CAD_structure.jpg)
