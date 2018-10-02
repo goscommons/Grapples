@@ -1,7 +1,7 @@
 
 /* Tynes Subassemblies parameters*/
 l=1000;
-tines_num=5;
+tines_num=6;
 sq_tb= 3;// inches;
 sh_thick=10;
 
@@ -11,14 +11,19 @@ d_b_tines=l/tines_num;
 /*Lead Parameters*/
 l_lead=300;
 
-/* linear_extrude(height = fanwidth, center = true, convexity = 10) */
+/* Tynes Assembly
+- [x] In Out Gussets for out tynes
+- [x] In gussets for inside tynes
+
+*/
 module tines(){
-color("red")
+color("red"){
+translate([-sh_thick,0,0])rotate([0,90,0])linear_extrude(height = sh_thick)import (file = "ingussets.dxf");
+translate([sh_thick,0,0])rotate([0,90,0])linear_extrude(height = sh_thick)import (file = "outgussets.dxf");}
+
 rotate([0,90,0])linear_extrude(height = sh_thick)import (file = "outsidetine.dxf");
-/* cube(size=[10, 10, 10], center=true); */
+
 }
-
-
 
 /*Support Assembly
 - [] mount cylinder base 01
@@ -32,9 +37,7 @@ rotate([0,90,0])linear_extrude(height = sh_thick)import (file = "outsidetine.dxf
 */
 
 module hinch(){
-
 rotate([0,90,0])linear_extrude(height = sh_thick)import(file="hinch.dxf");
-
 
 }
 
@@ -53,7 +56,20 @@ module sq_tube(){
  	}
 }
 
+module in_tines(){
+	rotate([0,90,0])
+	linear_extrude(height = sh_thick)
+	import(file="insidetine.dxf");
+	color("red"){
+	translate([-sh_thick,0,0])rotate([0,90,0])linear_extrude(height = sh_thick)import (file = "ingussets.dxf");
+	translate([sh_thick,0,0])rotate([0,90,0])linear_extrude(height = sh_thick)import (file = "ingussets.dxf");}
 
+}
+
+/* in_tines(); */
+
+
+module integration(){
 // Square tube bottom
 translate([-sh_thick*2,-20,50]){
 translate([sh_thick*2+l/2,0,50])rotate([75,0,0])color("yellow")
@@ -71,22 +87,27 @@ for (i=[0:1]) {
 }
 
 
-
 translate([sh_thick*2+l/2,105,450])rotate([75,0,0])color("blue")
 sq_tube([l-sh_thick*2,sq_tb*(24.5),sq_tb*(24.5)]);
 }
 
-
-
-
-
 /*tynes
 - [] hinches
-
  sub-asssembly*/
+
+
+
 translate([d_b_tines,0,0])for (i=[0:tines_num-2])
    translate([i*d_b_tines,0,0])
-     rotate([0,90,0])linear_extrude(height = sh_thick)import(file="insidetine.dxf");
+	 // Replace this by a module
+     /* rotate([0,90,0])linear_extrude(height = sh_thick)import(file="insidetine.dxf"); */
+		 in_tines();
 
 translate([l,0,0])tines();
-tines();
+mirror([1, 0, 0]) {
+	translate([0,0,0])
+	tines();
+	}
+}
+
+integration();
