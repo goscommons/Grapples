@@ -1,7 +1,7 @@
 
 /* Tynes Subassemblies parameters*/
-l=1600;
-tynes_num=10;
+l=1200;
+tynes_num=5;
 sq_tb= 3;// inches;
 sh_thick=10;
 
@@ -9,7 +9,7 @@ d_b_tynes=l/tynes_num;
 
 
 /*Lead Parameters*/
-l_lid=500;
+l_lid=520;
 l_ratio=(l_lid-l_lid*0.07)/450;
 
 /* Tynes Assembly
@@ -130,7 +130,7 @@ mirror([1, 0, 0]) {
 	}
 }
 
-/* integration(); */
+integration();
 
 
 /*Lids subassembly*/
@@ -162,12 +162,14 @@ module lid_jaw(){
 	import (file = "lid_jaw.dxf", center=true);
 }
 
+for (i=[0:1]) {
+	translate([i*l/2,0,0])
 color("yellow"){
 /*lids subassembly
 - [x] lid jaw
 - [] busshings
 - [] cylinder back
-- [] cyinder front
+- [] cylinder front
 */
 translate([l/4.25,880,-220])
 rotate([0,90,90])
@@ -193,5 +195,5 @@ front_plate();
 translate([l/4-l/4*0.05,780,450])
 rotate([62,0,0])
 sq_tube(l_lid-l_lid*0.05,2.2);
-
+}
 }
