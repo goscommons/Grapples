@@ -9,7 +9,7 @@ d_b_tynes=l/tynes_num;
 
 
 /*Lead Parameters*/
-l_lid=400;
+l_lid=450;
 l_ratio=(l_lid-l_lid*0.1)/450;
 
 /* Tynes Assembly
@@ -55,12 +55,18 @@ module mount_cylinder(){
 }
 
 // Square tube
-module sq_tube(){
-	difference() {
+module sq_tube(length,size){
+	/* difference() {
 		cube([l,sq_tb*(24.5),sq_tb*(24.5)], center=true);
 		cube(size=[l+l*0.2, sq_tb*(24.5)-15, sq_tb*(24.5)-15], center=true);
- 	}
+ 	} */
+
+	difference(length,size) {
+		cube([length,size*24.5,size*24.5], center=true);
+		cube([length+length*0.2, size*(24.5)-15, size*(24.5)-15], center=true);
+	}
 }
+
 
 module in_tynes(){
 	rotate([0,90,0])
@@ -94,7 +100,7 @@ module integration(){
 translate([-sh_thick*2,-20,40]){
 translate([sh_thick*2+l/2,0,50])rotate([75,0,0])color("yellow")
 // Squre tube top
-sq_tube([l-sh_thick*2,sq_tb*(24.5),sq_tb*(24.5)]);
+sq_tube(l,3);
 
 for (i=[0:1]) {
 	translate([i*l/2,0,0]){
@@ -108,7 +114,7 @@ for (i=[0:1]) {
 
 
 translate([sh_thick*2+l/2,105,450])rotate([75,0,0])color("blue")
-sq_tube([l-sh_thick*2,sq_tb*(24.5),sq_tb*(24.5)]);
+sq_tube(l,3);
 }
 
 translate([d_b_tynes,0,0])for (i=[0:tynes_num-2])
@@ -124,7 +130,7 @@ mirror([1, 0, 0]) {
 	}
 }
 
-integration();
+/* integration(); */
 
 
 /*Lids subassembly*/
@@ -166,4 +172,10 @@ rotate([-77,0,0])
 rotate([0,0,270])
 scale([1,l_ratio,1])
 front_plate();
+
+
+translate([l/4-l/4*0.05,780,450])
+rotate([62,0,0])
+sq_tube(l_lid-l_lid*0.05,2.2);
+
 }
