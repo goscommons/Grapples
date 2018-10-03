@@ -86,14 +86,22 @@ module in_tynes(){
 }
 
 /* in_tynes(); */
+module tube(r,lng,th){
+/* difference(){
+	cylinder(r=17, h=l, center=true);
+	cylinder(r=15, h=l+l*0.2, center=true);
+	} */
+	difference(){
+		cylinder(r=r, h=lng, center=true);
+		cylinder(r=r-th, h=lng+lng*0.2, center=true);
+		}
+}
 
 translate([l/2,710,44])
 color("white")
 rotate([0,90,0])
-difference(){
-	cylinder(r=17, h=l, center=true);
-	cylinder(r=15, h=l+l*0.2, center=true);
-}
+tube(17,l,3);
+
 
 module integration(){
 // Square tube bottom
@@ -105,9 +113,9 @@ sq_tube(l,3);
 for (i=[0:1]) {
 	translate([i*l/2,0,0]){
 	color("green"){
-	rotate([-15,0,0])translate([l/2/2+l_lid/2,-55,420])hinch();
-	rotate([-15,0,0])translate([l/2/2-l_lid/2,-55,420])hinch();
-	rotate([-15,0,0])translate([l/2/2,-55,420])mount_cylinder();
+	rotate([-15,0,0])translate([l/3.75+l_lid/2,-55,420])hinch();
+	rotate([-15,0,0])translate([l/3.75-l_lid/2,-55,420])hinch();
+	rotate([-15,0,0])translate([l/3.75,-55,420])mount_cylinder();
 	}
 	}
 }
@@ -134,6 +142,7 @@ integration();
 
 
 /*Lids subassembly*/
+module lids_assem(){
 module lids(){
 /* - [] thickness space, coupling connection
 */
@@ -166,26 +175,32 @@ for (i=[0:1]) {
 	translate([i*l/2,0,0])
 color("yellow"){
 /*lids subassembly
-- [x] lid jaw
 - [] busshings
-- [] cylinder back
-- [] cylinder front
+- [] cylinder mount
 */
-translate([l/4.25,880,-220])
+translate([l/4,856,160])
+rotate([90,0,90])
+tube(20,l_lid,3);
+
+translate([l/4,189,548])
+rotate([90,0,90])
+tube(15,l_lid,3);
+
+translate([l/4,880,-220])
 rotate([0,90,90])
 scale([1,l_ratio,1])
 lid_jaw();
 
-translate([l/4.25,181,-155])
+translate([l/4,181,-155])
 lids();
 
-translate([l/4.25,205,540])
+translate([l/4,205,540])
 rotate([-6, 0, 0])
 rotate([0,0,90])
 scale([1,l_ratio,1])
 up_plate();
 
-translate([l/4.25,865,210])
+translate([l/4,865,210])
 rotate([-77,0,0])
 rotate([0,0,270])
 scale([1,l_ratio,1])
@@ -195,5 +210,17 @@ front_plate();
 translate([l/4-l/4*0.05,780,450])
 rotate([62,0,0])
 sq_tube(l_lid-l_lid*0.05,2.2);
+		}
+	}
 }
+
+lids_assem();
+
+module plato(args) {
+	linear_extrude(height = 10)
+	import (file = "cylinder_rod_mount.dxf");
 }
+
+translate([l/4,765,510])
+rotate([0,90,0])
+plato();
