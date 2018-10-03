@@ -9,8 +9,8 @@ d_b_tynes=l/tynes_num;
 
 
 /*Lead Parameters*/
-l_lid=450;
-l_ratio=(l_lid-l_lid*0.1)/450;
+l_lid=500;
+l_ratio=(l_lid-l_lid*0.07)/450;
 
 /* Tynes Assembly
 - [x] In Out Gussets for out tynes
@@ -157,11 +157,27 @@ module front_plate(){
 	import (file = "brace_plate_lid_front.dxf");
 }
 
+module lid_jaw(){
+	linear_extrude(height = 10, center=true)
+	import (file = "lid_jaw.dxf", center=true);
+}
+
 color("yellow"){
+/*lids subassembly
+- [x] lid jaw
+- [] busshings
+- [] cylinder back
+- [] cyinder front
+*/
+translate([l/4.25,880,-220])
+rotate([0,90,90])
+scale([1,l_ratio,1])
+lid_jaw();
+
 translate([l/4.25,181,-155])
 lids();
 
-translate([l/4.25,200,530])
+translate([l/4.25,205,540])
 rotate([-6, 0, 0])
 rotate([0,0,90])
 scale([1,l_ratio,1])
