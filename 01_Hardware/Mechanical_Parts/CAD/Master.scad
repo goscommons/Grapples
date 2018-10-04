@@ -1,22 +1,17 @@
-
+// INDEPENDENT VARIABLES
 /* Tynes Subassemblies parameters*/
-l=1200;
-tynes_num=5;
-sq_tb= 3;// inches;
-sh_thick=10;
+l=1200;// width of grapples
+tynes_num=10;//ammmount of inner tynes
+sh_thick=10; // Sheet thickness
 
-d_b_tynes=l/tynes_num;
-
-
-/*Lead Parameters*/
+/*Lid Parameters*/
 l_lid=520;
-l_ratio=(l_lid-l_lid*0.07)/450;
 
-/* Tynes Assembly
-- [x] In Out Gussets for out tynes
-- [x] In gussets for inside tynes
+// DEPENDENT VARIABLES**DON'T CHANGE**
+d_b_tynes=l/tynes_num;// distance between tynes recalculation
+l_ratio=(l_lid-l_lid*0.07)/450;// Recalculation of front and up plate based on original size
 
-*/
+
 module tynes(){
 color("red"){
 translate([-sh_thick,0,0])rotate([0,90,0])linear_extrude(center=true,  height = sh_thick)import (file = "ingussets.dxf");
@@ -171,13 +166,33 @@ module lid_jaw(){
 	import (file = "lid_jaw.dxf", center=true);
 }
 
+module rod_mount(args) {
+	translate([0,0,sh_thick])
+	linear_extrude(height = sh_thick)
+	import (file = "cylinder_rod_mount.dxf");
+	color("red")
+	linear_extrude(height = sh_thick)
+	import (file = "cylinder_rod_mount_in.dxf");
+	translate([0,0,-sh_thick])
+	linear_extrude(height = sh_thick)
+	import (file = "cylinder_rod_mount.dxf");
+}
+
+
+
 for (i=[0:1]) {
 	translate([i*l/2,0,0])
 color("yellow"){
 /*lids subassembly
 - [] busshings
-- [] cylinder mount
+- [x] cylinder mount
 */
+translate([l/4,767,493])
+rotate([12,0,0])
+rotate([0,90,0])
+rod_mount();
+
+
 translate([l/4,856,160])
 rotate([90,0,90])
 tube(20,l_lid,3);
@@ -215,12 +230,3 @@ sq_tube(l_lid-l_lid*0.05,2.2);
 }
 
 lids_assem();
-
-module plato(args) {
-	linear_extrude(height = 10)
-	import (file = "cylinder_rod_mount.dxf");
-}
-
-translate([l/4,765,510])
-rotate([0,90,0])
-plato();
